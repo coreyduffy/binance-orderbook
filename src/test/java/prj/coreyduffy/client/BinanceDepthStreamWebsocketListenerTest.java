@@ -32,9 +32,25 @@ class BinanceDepthStreamWebsocketListenerTest {
         // Given
         WebSocket mockWebSocket = mock(WebSocket.class);
         BinanceDepthStreamWebsocketListener listener = new BinanceDepthStreamWebsocketListener();
+        String jsonInput = """
+                {
+                  "e": "depthUpdate",
+                  "E": 1672515782136,
+                  "s": "BNBBTC",
+                  "U": 157,
+                  "u": 160,
+                  "b": [
+                    ["0.0024", "10"]
+                  ],
+                  "a": [
+                    ["0.0026", "100"]
+                  ]
+                }
+                """;
+
 
         // When
-        listener.onText(mockWebSocket, "Test Data", true);
+        listener.onText(mockWebSocket, jsonInput, true);
 
         // Then
         verify(mockWebSocket).request(1);

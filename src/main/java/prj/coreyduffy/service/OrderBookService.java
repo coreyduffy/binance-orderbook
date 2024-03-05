@@ -43,9 +43,7 @@ public class OrderBookService {
         List<Order> orders = new ArrayList<>();
         if (ordersNode != null) {
             for (JsonNode orderNode : ordersNode) {
-                Order order = new Order();
-                order.setPrice(orderNode.get(0).asText());
-                order.setQuantity(orderNode.get(1).asText());
+                Order order = new Order(orderNode.get(0).asText(), orderNode.get(1).asText());
                 orders.add(order);
             }
         }

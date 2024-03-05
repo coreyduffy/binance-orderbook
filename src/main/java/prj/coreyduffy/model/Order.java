@@ -4,6 +4,13 @@ public class Order {
     private String price;
     private String quantity;
 
+    public Order() {}
+
+    public Order(String price, String quantity) {
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public String getPrice() {
         return price;
     }

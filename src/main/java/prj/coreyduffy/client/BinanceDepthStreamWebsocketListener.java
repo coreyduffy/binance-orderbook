@@ -1,9 +1,14 @@
 package prj.coreyduffy.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import prj.coreyduffy.model.OrderDepthEvent;
+
 import java.net.http.WebSocket;
 import java.util.concurrent.CompletionStage;
 
 public class BinanceDepthStreamWebsocketListener implements WebSocket.Listener {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     @Override
     public void onOpen(WebSocket webSocket) {
@@ -12,10 +17,13 @@ public class BinanceDepthStreamWebsocketListener implements WebSocket.Listener {
 
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-        // TODO: Add code to handle event
-        System.out.println("Received message: " + data);
-        webSocket.request(1);
-        return null;
+        try {
+            OrderDepthEvent event = OBJECT_MAPPER.readValue(data.toString(), OrderDepthEvent.class);
+            webSocket.request(1);
+            return null;
+        } catch (JsonProcessingException e) {
+            throw new BinanceDepthStreamWebsocketException("Unable to handle order depth event", e);
+        }
     }
 
     @Override

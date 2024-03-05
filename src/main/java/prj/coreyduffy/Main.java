@@ -23,7 +23,6 @@ public class Main {
             String bodyString = binanceApiClient.fetchDepthSnapshot(symbol);
             OrderBookService orderBookService = OrderBookService.getInstance();
             OrderBook orderBook = orderBookService.convertSnapshotJsonToOrderBook(bodyString);
-            System.out.println("SNAPSHOT: " + orderBook.toString());
         }
     }
 }
