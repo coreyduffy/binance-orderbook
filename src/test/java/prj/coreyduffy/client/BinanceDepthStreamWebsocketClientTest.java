@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import prj.coreyduffy.service.OrderDepthEventProcessorService;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -26,6 +27,8 @@ class BinanceDepthStreamWebsocketClientTest {
     private HttpClient mockHttpClient;
     @Mock
     private WebSocket.Builder mockWebSocketBuilder;
+    @Mock
+    private OrderDepthEventProcessorService mockOrderDepthEventProcessorService;
     private ExecutorService executorService;
 
     @BeforeEach
@@ -49,7 +52,7 @@ class BinanceDepthStreamWebsocketClientTest {
         when(mockHttpClient.newWebSocketBuilder()).thenReturn(mockWebSocketBuilder);
         when(mockWebSocketBuilder.buildAsync(any(URI.class), any(WebSocket.Listener.class)))
                 .thenReturn(CompletableFuture.completedFuture(mock(WebSocket.class)));
-        BinanceDepthStreamWebsocketClient client = new BinanceDepthStreamWebsocketClient(mockHttpClient, executorService);
+        BinanceDepthStreamWebsocketClient client = new BinanceDepthStreamWebsocketClient(mockHttpClient, executorService, mockOrderDepthEventProcessorService);
 
         // When
         CompletableFuture<Void> result = client.connect("bnbbtc");
@@ -67,7 +70,7 @@ class BinanceDepthStreamWebsocketClientTest {
         when(mockHttpClient.newWebSocketBuilder()).thenReturn(mockWebSocketBuilder);
         when(mockWebSocketBuilder.buildAsync(any(URI.class), any(WebSocket.Listener.class)))
                 .thenReturn(CompletableFuture.completedFuture(mock(WebSocket.class)));
-        BinanceDepthStreamWebsocketClient client = new BinanceDepthStreamWebsocketClient(mockHttpClient, executorService);
+        BinanceDepthStreamWebsocketClient client = new BinanceDepthStreamWebsocketClient(mockHttpClient, executorService, mockOrderDepthEventProcessorService);
 
         // When
         CompletableFuture<Void> result = client.connect("BNBBTC");

@@ -3,12 +3,20 @@ package prj.coreyduffy.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import prj.coreyduffy.model.OrderDepthEvent;
+import prj.coreyduffy.service.OrderDepthEventProcessorService;
 
 import java.net.http.WebSocket;
 import java.util.concurrent.CompletionStage;
 
 public class BinanceDepthStreamWebsocketListener implements WebSocket.Listener {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private final StringBuilder dataBuffer = new StringBuilder();
+
+    private final OrderDepthEventProcessorService orderDepthEventProcessorService;
+
+    public BinanceDepthStreamWebsocketListener(OrderDepthEventProcessorService orderDepthEventProcessorService) {
+        this.orderDepthEventProcessorService = orderDepthEventProcessorService;
+    }
 
     @Override
     public void onOpen(WebSocket webSocket) {
@@ -17,13 +25,22 @@ public class BinanceDepthStreamWebsocketListener implements WebSocket.Listener {
 
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
-        try {
-            OrderDepthEvent event = OBJECT_MAPPER.readValue(data.toString(), OrderDepthEvent.class);
-            webSocket.request(1);
-            return null;
-        } catch (JsonProcessingException e) {
-            throw new BinanceDepthStreamWebsocketException("Unable to handle order depth event", e);
+        dataBuffer.append(data);
+
+        if (last) {
+            try {
+                String completeData = dataBuffer.toString();
+                OrderDepthEvent event = OBJECT_MAPPER.readValue(completeData, OrderDepthEvent.class);
+                orderDepthEventProcessorService.bufferEvent(event);
+            } catch (JsonProcessingException e) {
+                throw new BinanceDepthStreamWebsocketException("Unable to parse order depth event", e);
+            } finally {
+                dataBuffer.setLength(0);
+            }
         }
+
+        webSocket.request(1);
+        return null;
     }
 
     @Override
