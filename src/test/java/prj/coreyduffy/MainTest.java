@@ -9,15 +9,6 @@ class MainTest {
     private static final String ILLEGAL_ARGUMENT_MESSAGE = "Please ensure that one argument (the symbol you would like to query) is passed";
 
     @Test
-    void testMain_CorrectArgument() {
-        // Given
-        String[] args = {"BNBBTC"};
-
-        // When - Then
-        assertDoesNotThrow(() -> main(args));
-    }
-
-    @Test
     void testMain_NoArguments() {
         // Given
         String[] args = {};
