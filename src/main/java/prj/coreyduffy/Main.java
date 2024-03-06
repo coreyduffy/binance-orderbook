@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
+    private static int NUM_OF_ORDERS_TO_DISPLAY = 3;
     public static void main(String[] args) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Please ensure that one argument (the symbol you would like to query) is passed");
@@ -25,7 +26,7 @@ public class Main {
             BinanceDepthStreamWebsocketClient binanceDepthStreamWebsocketClient = new BinanceDepthStreamWebsocketClient(httpClient, executorService, orderDepthEventProcessorService);
             BinanceHttpApiClient binanceHttpApiClient = new BinanceHttpApiClient(httpClient);
             OrderBookService orderBookService = new BinanceOrderBookService(orderDepthEventProcessorService, binanceDepthStreamWebsocketClient, binanceHttpApiClient);
-            orderBookService.printLiveOrderBookUpdates(symbol, 3);
+            orderBookService.printLiveOrderBookUpdates(symbol, NUM_OF_ORDERS_TO_DISPLAY);
         }
     }
 }

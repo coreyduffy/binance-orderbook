@@ -3,14 +3,14 @@ package prj.coreyduffy.service;
 import prj.coreyduffy.model.OrderBook;
 import prj.coreyduffy.model.OrderDepthEvent;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
 public class OrderDepthEventProcessorService {
-    private final ConcurrentLinkedQueue<OrderDepthEvent> eventQueue;
+    private final Queue<OrderDepthEvent> eventQueue;
     private final ExecutorService executorService;
 
-    public OrderDepthEventProcessorService(ConcurrentLinkedQueue<OrderDepthEvent> eventQueue,
+    public OrderDepthEventProcessorService(Queue<OrderDepthEvent> eventQueue,
                                            ExecutorService executorService) {
         this.eventQueue = eventQueue;
         this.executorService = executorService;
