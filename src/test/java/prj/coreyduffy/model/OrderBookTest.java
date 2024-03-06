@@ -45,7 +45,7 @@ class OrderBookTest {
         // Then
         assertEquals(101, orderBook.getLastUpdateId());
         assertEquals(2, orderBook.getBids().size());
-        assertTrue(orderBook.getBids().stream().anyMatch(o -> o.getPrice().equals("1.1") && o.getQuantity().equals("150")));
+        assertTrue(orderBook.getBids().stream().anyMatch(o -> o.price().equals("1.1") && o.quantity().equals("150")));
         assertTrue(orderBook.getAsks().isEmpty());
     }
 

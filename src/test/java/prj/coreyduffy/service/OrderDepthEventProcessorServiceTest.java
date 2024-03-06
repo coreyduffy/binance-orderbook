@@ -49,7 +49,7 @@ class OrderDepthEventProcessorServiceTest {
     }
 
     @Test
-    void testProcessBufferedEvents() {
+    void testProcessBufferedEvents() throws InterruptedException {
         // Given
         OrderDepthEvent event = new OrderDepthEvent();
         eventQueue.add(event);
@@ -59,6 +59,7 @@ class OrderDepthEventProcessorServiceTest {
         service.processBufferedEvents(orderBook);
 
         // Then
+        Thread.sleep(100);
         verify(orderBook).updateFromEvent(event);
         verify(orderBook).printTopOrders(3);
     }

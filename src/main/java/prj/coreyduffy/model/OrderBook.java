@@ -58,8 +58,8 @@ public class OrderBook {
     }
 
     private String formatOrderBookJson(List<Order> bids, List<Order> asks, int numOfOrdersToReturn) {
-        bids.sort(Comparator.comparingDouble(order -> Double.parseDouble(((Order)order).getPrice())).reversed());
-        asks.sort(Comparator.comparingDouble(order -> Double.parseDouble(order.getPrice())));
+        bids.sort(Comparator.comparingDouble(order -> Double.parseDouble(((Order)order).price())).reversed());
+        asks.sort(Comparator.comparingDouble(order -> Double.parseDouble(order.price())));
 
         List<Order> topBids = bids.stream().limit(numOfOrdersToReturn).toList();
         List<Order> topAsks = asks.stream().limit(numOfOrdersToReturn).toList();
@@ -68,14 +68,14 @@ public class OrderBook {
 
     private String formatOrders(List<Order> orders) {
         return orders.stream()
-                .map(order -> "[\"" + order.getPrice() + "\",\"" + order.getQuantity() + "\"]")
+                .map(order -> "[\"" + order.price() + "\",\"" + order.quantity() + "\"]")
                 .collect(Collectors.joining(",", "[", "]"));
     }
 
     private void updateOrders(List<Order> newOrders, List<Order> currentOrders) {
         newOrders.forEach(newOrder -> {
-            currentOrders.removeIf(order -> order.getPrice().equals(newOrder.getPrice()));
-            if (Double.parseDouble(newOrder.getQuantity()) > 0) {
+            currentOrders.removeIf(order -> order.price().equals(newOrder.price()));
+            if (Double.parseDouble(newOrder.quantity()) > 0) {
                 currentOrders.add(newOrder);
             }
         });

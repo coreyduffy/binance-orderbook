@@ -30,11 +30,11 @@ class OrderBookServiceTest {
         assertNotNull(orderBook);
         assertEquals(1027024L, orderBook.getLastUpdateId());
         assertEquals(1, orderBook.getBids().size());
-        assertEquals("4.00000000", orderBook.getBids().get(0).getPrice());
-        assertEquals("431.00000000", orderBook.getBids().get(0).getQuantity());
+        assertEquals("4.00000000", orderBook.getBids().get(0).price());
+        assertEquals("431.00000000", orderBook.getBids().get(0).quantity());
         assertEquals(1, orderBook.getAsks().size());
-        assertEquals("4.00000200", orderBook.getAsks().get(0).getPrice());
-        assertEquals("12.00000000", orderBook.getAsks().get(0).getQuantity());
+        assertEquals("4.00000200", orderBook.getAsks().get(0).price());
+        assertEquals("12.00000000", orderBook.getAsks().get(0).quantity());
     }
 
     @Test
@@ -63,13 +63,13 @@ class OrderBookServiceTest {
         assertNotNull(orderBook);
         assertEquals(1027024L, orderBook.getLastUpdateId());
         assertEquals(3, orderBook.getBids().size());
-        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.getPrice().equals("4.00000000") && order.getQuantity().equals("431.00000000")));
-        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.getPrice().equals("4.10000000") && order.getQuantity().equals("432.00000000")));
-        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.getPrice().equals("4.20000000") && order.getQuantity().equals("433.00000000")));
+        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.price().equals("4.00000000") && order.quantity().equals("431.00000000")));
+        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.price().equals("4.10000000") && order.quantity().equals("432.00000000")));
+        assertTrue(orderBook.getBids().stream().anyMatch(order -> order.price().equals("4.20000000") && order.quantity().equals("433.00000000")));
         assertEquals(3, orderBook.getAsks().size());
-        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.getPrice().equals("4.00000200") && order.getQuantity().equals("12.00000000")));
-        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.getPrice().equals("4.10000200") && order.getQuantity().equals("13.00000000")));
-        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.getPrice().equals("4.20000200") && order.getQuantity().equals("14.00000000")));
+        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.price().equals("4.00000200") && order.quantity().equals("12.00000000")));
+        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.price().equals("4.10000200") && order.quantity().equals("13.00000000")));
+        assertTrue(orderBook.getAsks().stream().anyMatch(order -> order.price().equals("4.20000200") && order.quantity().equals("14.00000000")));
     }
 
     @Test

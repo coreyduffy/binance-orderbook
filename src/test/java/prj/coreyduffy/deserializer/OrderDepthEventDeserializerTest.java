@@ -45,13 +45,13 @@ class OrderDepthEventDeserializerTest {
         assertNotNull(event.getBids());
         assertEquals(1, event.getBids().size());
         Order bid = event.getBids().get(0);
-        assertEquals("0.0024", bid.getPrice());
-        assertEquals("10", bid.getQuantity());
+        assertEquals("0.0024", bid.price());
+        assertEquals("10", bid.quantity());
         assertNotNull(event.getAsks());
         assertEquals(1, event.getAsks().size());
         Order ask = event.getAsks().get(0);
-        assertEquals("0.0026", ask.getPrice());
-        assertEquals("100", ask.getQuantity());
+        assertEquals("0.0026", ask.price());
+        assertEquals("100", ask.quantity());
     }
 
     @Test
