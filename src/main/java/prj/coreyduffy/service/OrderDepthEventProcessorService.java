@@ -20,7 +20,7 @@ public class OrderDepthEventProcessorService {
         eventQueue.add(event);
     }
 
-    public void processBufferedEvents(OrderBook orderBook) {
+    public void processBufferedEvents(OrderBook orderBook, int numOfOrders) {
         executorService.execute(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 OrderDepthEvent orderDepthEvent = null;
@@ -31,7 +31,7 @@ public class OrderDepthEventProcessorService {
                 }
                 if (orderDepthEvent != null) {
                     orderBook.updateFromEvent(orderDepthEvent);
-                    orderBook.printTopOrders(3);
+                    orderBook.printTopOrders(numOfOrders);
                 } else {
                     try {
                         Thread.sleep(100);

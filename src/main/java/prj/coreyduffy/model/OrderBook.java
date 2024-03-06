@@ -53,16 +53,16 @@ public class OrderBook {
         }
     }
 
-    public void printTopOrders(int numOfOrdersToReturn) {
-        System.out.println(formatOrderBookJson(getBids(), getAsks(), numOfOrdersToReturn));
+    public void printTopOrders(int numOfOrders) {
+        System.out.println(formatOrderBookJson(getBids(), getAsks(), numOfOrders));
     }
 
-    private String formatOrderBookJson(List<Order> bids, List<Order> asks, int numOfOrdersToReturn) {
+    private String formatOrderBookJson(List<Order> bids, List<Order> asks, int numOfOrders) {
         bids.sort(Comparator.comparingDouble(order -> Double.parseDouble(((Order)order).price())).reversed());
         asks.sort(Comparator.comparingDouble(order -> Double.parseDouble(order.price())));
 
-        List<Order> topBids = bids.stream().limit(numOfOrdersToReturn).toList();
-        List<Order> topAsks = asks.stream().limit(numOfOrdersToReturn).toList();
+        List<Order> topBids = bids.stream().limit(numOfOrders).toList();
+        List<Order> topAsks = asks.stream().limit(numOfOrders).toList();
         return "{\"lastUpdateId\":" + this.lastUpdateId + ", \"bids\":" + formatOrders(topBids) + ", \"asks\":" + formatOrders(topAsks) + "}";
     }
 

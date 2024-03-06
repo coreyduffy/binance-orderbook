@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BinanceApiClientTest {
+class BinanceHttpApiClientTest {
 
     @Mock
     private HttpClient mockHttpClient;
@@ -28,7 +28,7 @@ class BinanceApiClientTest {
     private HttpResponse<String> mockResponse;
 
     @InjectMocks
-    private BinanceApiClient apiClient;
+    private BinanceHttpApiClient apiClient;
 
     @Test
     void testFetchDepthSnapshot() throws IOException, InterruptedException {

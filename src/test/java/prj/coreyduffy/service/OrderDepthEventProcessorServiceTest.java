@@ -54,14 +54,15 @@ class OrderDepthEventProcessorServiceTest {
         OrderDepthEvent event = new OrderDepthEvent();
         eventQueue.add(event);
         OrderBook orderBook = spy(new OrderBook());
+        int numOfOrders = 3;
 
         // When
-        service.processBufferedEvents(orderBook);
+        service.processBufferedEvents(orderBook, numOfOrders);
 
         // Then
         Thread.sleep(100);
         verify(orderBook).updateFromEvent(event);
-        verify(orderBook).printTopOrders(3);
+        verify(orderBook).printTopOrders(numOfOrders);
     }
 
     @Test
@@ -71,7 +72,7 @@ class OrderDepthEventProcessorServiceTest {
         OrderBook orderBook = spy(new OrderBook());
 
         // When
-        service.processBufferedEvents(orderBook);
+        service.processBufferedEvents(orderBook, 3);
 
         // Then
         verifyNoInteractions(orderBook);

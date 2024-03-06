@@ -6,11 +6,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class BinanceApiClient {
+public class BinanceHttpApiClient {
     private static final String DEPTH_SNAPSHOT_URL_TEMPLATE = "https://api.binance.com/api/v3/depth?symbol=%s";
     private final HttpClient client;
 
-    public BinanceApiClient(HttpClient client) {
+    public BinanceHttpApiClient(HttpClient client) {
         this.client = client;
     }
 

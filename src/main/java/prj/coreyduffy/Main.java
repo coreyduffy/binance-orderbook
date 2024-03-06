@@ -1,10 +1,10 @@
 package prj.coreyduffy;
 
-import prj.coreyduffy.client.BinanceApiClient;
 import prj.coreyduffy.client.BinanceDepthStreamWebsocketClient;
-import prj.coreyduffy.model.OrderBook;
+import prj.coreyduffy.client.BinanceHttpApiClient;
 import prj.coreyduffy.model.OrderDepthEvent;
-import prj.coreyduffy.factory.OrderBookFactory;
+import prj.coreyduffy.service.BinanceOrderBookService;
+import prj.coreyduffy.service.OrderBookService;
 import prj.coreyduffy.service.OrderDepthEventProcessorService;
 
 import java.net.http.HttpClient;
@@ -18,17 +18,14 @@ public class Main {
             throw new IllegalArgumentException("Please ensure that one argument (the symbol you would like to query) is passed");
         }
         String symbol = args[0];
+        ConcurrentLinkedQueue<OrderDepthEvent> eventQueue = new ConcurrentLinkedQueue<>();
         ExecutorService executorService = Executors.newCachedThreadPool();
+        OrderDepthEventProcessorService orderDepthEventProcessorService = new OrderDepthEventProcessorService(eventQueue, executorService);
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
-            ConcurrentLinkedQueue<OrderDepthEvent> eventQueue = new ConcurrentLinkedQueue<>();
-            OrderDepthEventProcessorService orderDepthEventProcessorService = new OrderDepthEventProcessorService(eventQueue, executorService);
             BinanceDepthStreamWebsocketClient binanceDepthStreamWebsocketClient = new BinanceDepthStreamWebsocketClient(httpClient, executorService, orderDepthEventProcessorService);
-            binanceDepthStreamWebsocketClient.connect(symbol).join();
-            BinanceApiClient binanceApiClient = new BinanceApiClient(httpClient);
-            String bodyString = binanceApiClient.fetchDepthSnapshot(symbol);
-            OrderBookFactory orderBookFactory = OrderBookFactory.getInstance();
-            OrderBook orderBook = orderBookFactory.convertSnapshotJsonToOrderBook(bodyString);
-            orderDepthEventProcessorService.processBufferedEvents(orderBook);
+            BinanceHttpApiClient binanceHttpApiClient = new BinanceHttpApiClient(httpClient);
+            OrderBookService orderBookService = new BinanceOrderBookService(orderDepthEventProcessorService, binanceDepthStreamWebsocketClient, binanceHttpApiClient);
+            orderBookService.printLiveOrderBookUpdates(symbol, 3);
         }
     }
 }
