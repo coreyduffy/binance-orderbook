@@ -26,7 +26,6 @@ public class BinanceDepthStreamWebsocketListener implements WebSocket.Listener {
     @Override
     public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
         dataBuffer.append(data);
-
         if (last) {
             try {
                 String completeData = dataBuffer.toString();

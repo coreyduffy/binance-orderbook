@@ -12,7 +12,8 @@ import java.util.List;
 public class OrderBookService {
     private static final OrderBookService INSTANCE = new OrderBookService();
 
-    private OrderBookService() {}
+    private OrderBookService() {
+    }
 
     public static OrderBookService getInstance() {
         return INSTANCE;

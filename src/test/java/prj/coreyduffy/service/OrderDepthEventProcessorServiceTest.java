@@ -1,22 +1,33 @@
 package prj.coreyduffy.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import prj.coreyduffy.model.OrderBook;
 import prj.coreyduffy.model.OrderDepthEvent;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class OrderDepthEventProcessorServiceTest {
-
+    private ExecutorService executorService;
     private OrderDepthEventProcessorService service;
     private ConcurrentLinkedQueue<OrderDepthEvent> eventQueue;
 
     @BeforeEach
     void setUp() {
+        executorService = Executors.newSingleThreadExecutor();
         eventQueue = new ConcurrentLinkedQueue<>();
-        service = new OrderDepthEventProcessorService(eventQueue);
+        service = new OrderDepthEventProcessorService(eventQueue, executorService);
+    }
+
+    @AfterEach
+    void tearDown() {
+        executorService.shutdownNow();
     }
 
     @Test
@@ -35,5 +46,33 @@ class OrderDepthEventProcessorServiceTest {
         assertEquals(2, eventQueue.size());
         assertEquals(1L, eventQueue.poll().getLastUpdateId());
         assertEquals(2L, eventQueue.poll().getLastUpdateId());
+    }
+
+    @Test
+    void testProcessBufferedEvents() {
+        // Given
+        OrderDepthEvent event = new OrderDepthEvent();
+        eventQueue.add(event);
+        OrderBook orderBook = spy(new OrderBook());
+
+        // When
+        service.processBufferedEvents(orderBook);
+
+        // Then
+        verify(orderBook).updateFromEvent(event);
+        verify(orderBook).printTopOrders(3);
+    }
+
+    @Test
+    void testProcessBufferedEvents_DoesNothingIfQueueEmpty() {
+        // Given
+        eventQueue.clear();
+        OrderBook orderBook = spy(new OrderBook());
+
+        // When
+        service.processBufferedEvents(orderBook);
+
+        // Then
+        verifyNoInteractions(orderBook);
     }
 }

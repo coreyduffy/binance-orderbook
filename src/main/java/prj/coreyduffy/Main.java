@@ -21,13 +21,14 @@ public class Main {
         ExecutorService executorService = Executors.newCachedThreadPool();
         try (HttpClient httpClient = HttpClient.newHttpClient()) {
             ConcurrentLinkedQueue<OrderDepthEvent> eventQueue = new ConcurrentLinkedQueue<>();
-            OrderDepthEventProcessorService orderDepthEventProcessorService = new OrderDepthEventProcessorService(eventQueue);
+            OrderDepthEventProcessorService orderDepthEventProcessorService = new OrderDepthEventProcessorService(eventQueue, executorService);
             BinanceDepthStreamWebsocketClient binanceDepthStreamWebsocketClient = new BinanceDepthStreamWebsocketClient(httpClient, executorService, orderDepthEventProcessorService);
             binanceDepthStreamWebsocketClient.connect(symbol).join();
             BinanceApiClient binanceApiClient = new BinanceApiClient(httpClient);
             String bodyString = binanceApiClient.fetchDepthSnapshot(symbol);
             OrderBookService orderBookService = OrderBookService.getInstance();
             OrderBook orderBook = orderBookService.convertSnapshotJsonToOrderBook(bodyString);
+            orderDepthEventProcessorService.processBufferedEvents(orderBook);
         }
     }
 }
