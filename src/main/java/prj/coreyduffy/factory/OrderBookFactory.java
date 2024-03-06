@@ -1,4 +1,4 @@
-package prj.coreyduffy.service;
+package prj.coreyduffy.factory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderBookService {
-    private static final OrderBookService INSTANCE = new OrderBookService();
+public class OrderBookFactory {
+    private static final OrderBookFactory INSTANCE = new OrderBookFactory();
 
-    private OrderBookService() {
+    private OrderBookFactory() {
     }
 
-    public static OrderBookService getInstance() {
+    public static OrderBookFactory getInstance() {
         return INSTANCE;
     }
 
@@ -34,7 +34,7 @@ public class OrderBookService {
             orderBook.setAsks(convertJsonOrders(asksNode));
 
         } catch (IOException e) {
-            throw new OrderBookServiceException("Unable to create OrderBook", e);
+            throw new OrderBookFactoryException("Unable to create OrderBook", e);
         }
 
         return orderBook;

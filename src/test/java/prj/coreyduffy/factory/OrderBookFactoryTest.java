@@ -1,12 +1,14 @@
-package prj.coreyduffy.service;
+package prj.coreyduffy.factory;
 
 import org.junit.jupiter.api.Test;
+import prj.coreyduffy.factory.OrderBookFactory;
+import prj.coreyduffy.factory.OrderBookFactoryException;
 import prj.coreyduffy.model.OrderBook;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OrderBookServiceTest {
-    private final OrderBookService service = OrderBookService.getInstance();
+class OrderBookFactoryTest {
+    private final OrderBookFactory service = OrderBookFactory.getInstance();
 
     @Test
     void testConvertSnapshotJsonToOrderBook() {
@@ -80,7 +82,7 @@ class OrderBookServiceTest {
                 """;
 
         // When - Then
-        OrderBookServiceException exception = assertThrows(OrderBookServiceException.class, () -> service.convertSnapshotJsonToOrderBook(jsonSnapshot));
+        OrderBookFactoryException exception = assertThrows(OrderBookFactoryException.class, () -> service.convertSnapshotJsonToOrderBook(jsonSnapshot));
         assertEquals("Unable to create OrderBook", exception.getMessage());
     }
 }

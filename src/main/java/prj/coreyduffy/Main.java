@@ -4,7 +4,7 @@ import prj.coreyduffy.client.BinanceApiClient;
 import prj.coreyduffy.client.BinanceDepthStreamWebsocketClient;
 import prj.coreyduffy.model.OrderBook;
 import prj.coreyduffy.model.OrderDepthEvent;
-import prj.coreyduffy.service.OrderBookService;
+import prj.coreyduffy.factory.OrderBookFactory;
 import prj.coreyduffy.service.OrderDepthEventProcessorService;
 
 import java.net.http.HttpClient;
@@ -26,8 +26,8 @@ public class Main {
             binanceDepthStreamWebsocketClient.connect(symbol).join();
             BinanceApiClient binanceApiClient = new BinanceApiClient(httpClient);
             String bodyString = binanceApiClient.fetchDepthSnapshot(symbol);
-            OrderBookService orderBookService = OrderBookService.getInstance();
-            OrderBook orderBook = orderBookService.convertSnapshotJsonToOrderBook(bodyString);
+            OrderBookFactory orderBookFactory = OrderBookFactory.getInstance();
+            OrderBook orderBook = orderBookFactory.convertSnapshotJsonToOrderBook(bodyString);
             orderDepthEventProcessorService.processBufferedEvents(orderBook);
         }
     }
