@@ -74,7 +74,7 @@ With more time, a useful improvement would be to wait with an exponential backof
 This would help ensure that updates aren't lost to the order book and an accurate local order book is still output to the user.
 
 ### Libraries
-I've tried to keep the use of libraries to a minimum as was specified in the challenge. 
+I've tried to keep the use of libraries to a minimum. 
 
 The libraries I have used are:
 - Jackson, for deserialising json responses from the http and websocket endpoints.
